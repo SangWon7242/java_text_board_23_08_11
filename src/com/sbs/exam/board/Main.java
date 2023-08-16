@@ -27,10 +27,7 @@ public class Main {
         int id = articlesLastId + 1;
         articlesLastId = id;
 
-        Article article = new Article();
-        article.id = id;
-        article.title = title;
-        article.content = content;
+        Article article = new Article(id, title, content);
 
         System.out.println("생성 된 게시물 객체 : " +  article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
@@ -51,9 +48,14 @@ class Article {
   String title;
   String content;
 
+  Article(int id, String title, String content) {
+    this.id = id;
+    this.title = title;
+    this.content = content;
+  }
+
   @Override
   public String toString() {
-    // return "안녕 %d".formatted(10);
     return String.format("{id : %d, title : \"%s\", content : \"%s\"}", id, title, content);
   }
 }
