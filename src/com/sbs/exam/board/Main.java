@@ -28,6 +28,7 @@ public class Main {
       String cmd = sc.nextLine();
 
       Rq rq = new Rq(cmd);
+      Map<String, String> params = rq.getParams();
 
       if(rq.getUrlPath().equals("exit")) {
         break;
@@ -49,12 +50,15 @@ public class Main {
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       }
       else if(rq.getUrlPath().equals("/usr/article/detail")) {
-        if(articles.isEmpty()) {
+        int id = Integer.parseInt(params.get("id"));
+
+        // 게시물이 비어있거나, 입력한 id가 articles에 size를 넘어선 경우
+        if(articles.isEmpty() || id > articles.size()) {
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
         }
 
-        Article article = articles.get(articles.size() - 1);
+        Article article = articles.get(id - 1);
 
         System.out.println("-- 게시물 상세보기 --");
         System.out.printf("번호 : %d\n", article.id);
@@ -139,8 +143,6 @@ class Util {
     Map<String, String> params = new HashMap<>();
 
     String[] urlBits = url.split("\\?", 2);
-    // /usr/article/list
-    // page=2&searchKeyword=안녕? 나는 홍길동이야.
 
     if(urlBits.length == 1) {
       return params;
