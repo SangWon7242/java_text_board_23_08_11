@@ -1,8 +1,6 @@
 package com.sbs.exam.board;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
   static void makeTestData(List<Article> articles) {
@@ -29,10 +27,12 @@ public class Main {
       System.out.printf("명령) ");
       String cmd = sc.nextLine();
 
-      if(cmd.equals("exit")) {
+      Rq rq = new Rq(cmd);
+
+      if(rq.getUrlPath().equals("exit")) {
         break;
       }
-      else if(cmd.equals("/usr/article/write")) {
+      else if(rq.getUrlPath().equals("/usr/article/write")) {
         System.out.println("== 게시물 등록 ==");
         System.out.printf("제목 : ");
         String title = sc.nextLine();
@@ -48,7 +48,7 @@ public class Main {
         System.out.println("생성 된 게시물 객체 : " +  article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       }
-      else if(cmd.equals("/usr/article/detail")) {
+      else if(rq.getUrlPath().equals("/usr/article/detail")) {
         if(articles.isEmpty()) {
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
@@ -56,17 +56,26 @@ public class Main {
 
         Article article = articles.get(articles.size() - 1);
 
-        System.out.println("-- 게시물 상세내용 --");
-        System.out.printf("번호 : %s\n", article.id);
+        System.out.println("-- 게시물 상세보기 --");
+        System.out.printf("번호 : %d\n", article.id);
         System.out.printf("제목 : %s\n", article.title);
         System.out.printf("내용 : %s\n", article.content);
       }
-      else if(cmd.equals("/usr/article/list")) {
+      else if(rq.getUrlPath().equals("/usr/article/list")) {
         System.out.println("-- 게시물 리스트 --");
         System.out.println("-------------------");
         System.out.println("번호 / 제목");
         System.out.println("-------------------");
+
         // 정순 정렬 코드
+        // v1
+        /*
+        for(int i = 0; i < articles.size(); i++ ) {
+          Article article = articles.get(i);
+          System.out.printf("%d / %s\n", article.id, article.title);
+        }
+        */
+        // v2
         // articles.stream().forEach(article -> System.out.printf("%d / %s\n", article.id, article.title));
 
         // 역순 정렬 코드
@@ -101,5 +110,56 @@ class Article {
   @Override
   public String toString() {
     return String.format("{id : %d, title : \"%s\", content : \"%s\"}", id, title, content);
+  }
+}
+
+class Rq {
+  private String url;
+  private Map<String, String> params;
+  private String urlPath;
+
+  Rq(String url) {
+    this.url = url;
+    urlPath = Util.getUrlPathFromUrl(this.url);
+    params = Util.getParamsFromUrl(this.url);
+  }
+
+  public Map<String, String> getParams() {
+    return params;
+  }
+
+  public String getUrlPath() {
+    return urlPath;
+  }
+
+}
+
+class Util {
+  static Map<String, String> getParamsFromUrl(String url) {
+    Map<String, String> params = new HashMap<>();
+
+    String[] urlBits = url.split("\\?", 2);
+    // /usr/article/list
+    // page=2&searchKeyword=안녕? 나는 홍길동이야.
+
+    if(urlBits.length == 1) {
+      return params;
+    }
+
+    for(String bit : urlBits[1].split("&")) {
+      String[] bitBits = bit.split("=", 2);
+
+      if(bitBits.length == 1) {
+        continue;
+      }
+
+      params.put(bitBits[0], bitBits[1]);
+    }
+
+    return params;
+  }
+
+  static String getUrlPathFromUrl(String url) {
+    return url.split("\\?", 2)[0];
   }
 }
