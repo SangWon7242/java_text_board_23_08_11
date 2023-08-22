@@ -50,7 +50,19 @@ public class Main {
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       }
       else if(rq.getUrlPath().equals("/usr/article/detail")) {
-        int id = Integer.parseInt(params.get("id"));
+        if(params.containsKey("id") == false) {
+          System.out.println("id를 입력해주세요.");
+          continue;
+        }
+
+        int id = 0;
+
+        try {
+          id = Integer.parseInt(params.get("id"));
+        } catch (NumberFormatException e) {
+          System.out.println("id를 정수 형태로 입력해주세요.");
+          continue;
+        }
 
         // 게시물이 비어있거나, 입력한 id가 articles에 size를 넘어선 경우
         if(articles.isEmpty() || id > articles.size()) {
