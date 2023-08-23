@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Main {
   static void makeTestData(List<Article> articles) {
-    articles.add(new Article(1, "제목1", "내용1"));
-    articles.add(new Article(2, "제목2", "내용2"));
-    articles.add(new Article(3, "제목3", "내용3"));
+    for(int i = 1; i <= 100; i++) {
+      articles.add(new Article(i, "제목" + i, "내용" + i));
+    }
   }
 
   public static void main(String[] args) {
