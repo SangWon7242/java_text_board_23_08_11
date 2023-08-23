@@ -81,6 +81,8 @@ public class Main {
         System.out.println("번호 / 제목");
         System.out.println("-------------------");
 
+        List<Article> sortedArticles = articles; // 정렬이 안된 articles(1, 2, 3.. 순)
+
         boolean orderByIdDesc = true;
 
         if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
@@ -88,19 +90,12 @@ public class Main {
         }
 
         if(orderByIdDesc) {
-          for (int i = articles.size() - 1; i >= 0; i--) {
-            Article article = articles.get(i);
-            System.out.printf("%d / %s\n", article.id, article.title);
-          }
-        }
-        else {
-          // articles.stream().forEach(article -> System.out.printf("%d / %s\n", article.id, article.title));
-          for(Article article : articles) {
-            System.out.printf("%d / %s\n", article.id, article.title);
-          }
+          sortedArticles = Util.reverseList(sortedArticles);
         }
 
-
+        for (Article article : sortedArticles) {
+          System.out.printf("%d / %s\n", article.id, article.title);
+        }
 
       } else {
         System.out.println("잘못 된 명령어 입니다.");
@@ -176,5 +171,17 @@ class Util {
 
   static String getUrlPathFromUrl(String url) {
     return url.split("\\?", 2)[0];
+  }
+
+
+  // 이 함수는 원본리스트를 훼손하지 않고, 새 리스트를 만든다.
+  // 즉 정렬이 반대인 복사본 리스트를 반환한다.
+  public static<T> List<T> reverseList(List<T> list) {
+    List<T> reverse = new ArrayList<>(list.size());
+
+    for ( int i = list.size() - 1; i >= 0; i-- ) {
+      reverse.add(list.get(i));
+    }
+    return reverse;
   }
 }
