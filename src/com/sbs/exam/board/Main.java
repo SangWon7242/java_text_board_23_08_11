@@ -81,7 +81,24 @@ public class Main {
         System.out.println("번호 / 제목");
         System.out.println("-------------------");
 
-        List<Article> sortedArticles = articles; // 정렬이 안된 articles(1, 2, 3.. 순)
+        // 검색 시작
+        List<Article> filteredArticles = articles;
+
+        if(params.containsKey("searchKeyword")) {
+          String searchKeyword = params.get("searchKeyword");
+
+          filteredArticles = new ArrayList<>();
+
+          for (Article article : articles) {
+            boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
+
+            if(matched) {
+              filteredArticles.add(article);
+            }
+          }
+        }
+
+        List<Article> sortedArticles = filteredArticles; // 검색어가 없으면 filteredArticles는 articles랑 똑같다.
 
         boolean orderByIdDesc = true;
 
