@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main {
   static void makeTestData(List<Article> articles) {
-    for(int i = 1; i <= 100; i++) {
+    for (int i = 1; i <= 100; i++) {
       articles.add(new Article(i, "제목" + i, "내용" + i));
     }
   }
@@ -76,44 +76,7 @@ public class Main {
         System.out.printf("제목 : %s\n", article.title);
         System.out.printf("내용 : %s\n", article.content);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
-        System.out.println("-- 게시물 리스트 --");
-        System.out.println("-------------------");
-        System.out.println("번호 / 제목");
-        System.out.println("-------------------");
-
-        // 검색 시작
-        List<Article> filteredArticles = articles;
-
-        if(params.containsKey("searchKeyword")) {
-          String searchKeyword = params.get("searchKeyword");
-
-          filteredArticles = new ArrayList<>();
-
-          for (Article article : articles) {
-            boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
-
-            if(matched) {
-              filteredArticles.add(article);
-            }
-          }
-        }
-
-        List<Article> sortedArticles = filteredArticles; // 검색어가 없으면 filteredArticles는 articles랑 똑같다.
-
-        boolean orderByIdDesc = true;
-
-        if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
-          orderByIdDesc = false;
-        }
-
-        if(orderByIdDesc) {
-          sortedArticles = Util.reverseList(sortedArticles);
-        }
-
-        for (Article article : sortedArticles) {
-          System.out.printf("%d / %s\n", article.id, article.title);
-        }
-
+        actionUsrArticleList(articles, rq);
       } else {
         System.out.println("잘못 된 명령어 입니다.");
       }
@@ -122,6 +85,48 @@ public class Main {
     System.out.println("== 프로그램 종료 ==");
 
     sc.close();
+  }
+
+  private static void actionUsrArticleList(List<Article> articles, Rq rq) {
+    System.out.println("-- 게시물 리스트 --");
+    System.out.println("-------------------");
+    System.out.println("번호 / 제목");
+    System.out.println("-------------------");
+
+    Map<String, String> params = rq.getParams();
+
+    // 검색 시작
+    List<Article> filteredArticles = articles;
+
+    if(params.containsKey("searchKeyword")) {
+      String searchKeyword = params.get("searchKeyword");
+
+      filteredArticles = new ArrayList<>();
+
+      for (Article article : articles) {
+        boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
+
+        if(matched) {
+          filteredArticles.add(article);
+        }
+      }
+    }
+
+    List<Article> sortedArticles = filteredArticles; // 검색어가 없으면 filteredArticles는 articles랑 똑같다.
+
+    boolean orderByIdDesc = true;
+
+    if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
+      orderByIdDesc = false;
+    }
+
+    if(orderByIdDesc) {
+      sortedArticles = Util.reverseList(sortedArticles);
+    }
+
+    for (Article article : sortedArticles) {
+      System.out.printf("%d / %s\n", article.id, article.title);
+    }
   }
 }
 
@@ -193,10 +198,10 @@ class Util {
 
   // 이 함수는 원본리스트를 훼손하지 않고, 새 리스트를 만든다.
   // 즉 정렬이 반대인 복사본 리스트를 반환한다.
-  public static<T> List<T> reverseList(List<T> list) {
+  public static <T> List<T> reverseList(List<T> list) {
     List<T> reverse = new ArrayList<>(list.size());
 
-    for ( int i = list.size() - 1; i >= 0; i-- ) {
+    for (int i = list.size() - 1; i >= 0; i--) {
       reverse.add(list.get(i));
     }
     return reverse;
