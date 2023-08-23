@@ -33,20 +33,8 @@ public class Main {
       if (rq.getUrlPath().equals("exit")) {
         break;
       } else if (rq.getUrlPath().equals("/usr/article/write")) {
-        System.out.println("== 게시물 등록 ==");
-        System.out.printf("제목 : ");
-        String title = sc.nextLine();
-        System.out.printf("내용 : ");
-        String content = sc.nextLine();
-        int id = articlesLastId + 1;
-        articlesLastId = id;
-
-        Article article = new Article(id, title, content);
-
-        articles.add(article);
-
-        System.out.println("생성 된 게시물 객체 : " + article);
-        System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+       actionUsrArticleWrite(sc, articles, articlesLastId);
+       articlesLastId++;
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         actionUsrArticleDetail(rq, articles);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
@@ -59,6 +47,22 @@ public class Main {
     System.out.println("== 프로그램 종료 ==");
 
     sc.close();
+  }
+
+  private static void actionUsrArticleWrite(Scanner sc, List<Article> articles, int articlesLastId) {
+    System.out.println("== 게시물 등록 ==");
+    System.out.printf("제목 : ");
+    String title = sc.nextLine();
+    System.out.printf("내용 : ");
+    String content = sc.nextLine();
+    int id = ++articlesLastId;
+
+    Article article = new Article(id, title, content);
+
+    articles.add(article);
+
+    System.out.println("생성 된 게시물 객체 : " + article);
+    System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
   }
 
   private static void actionUsrArticleDetail(Rq rq, List<Article> articles) {
