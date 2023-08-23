@@ -29,7 +29,6 @@ public class Main {
       String cmd = sc.nextLine();
 
       Rq rq = new Rq(cmd);
-      Map<String, String> params = rq.getParams();
 
       if (rq.getUrlPath().equals("exit")) {
         break;
@@ -49,34 +48,9 @@ public class Main {
         System.out.println("생성 된 게시물 객체 : " + article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
-        if (params.containsKey("id") == false) {
-          System.out.println("id를 입력해주세요.");
-          continue;
-        }
-
-        int id = 0;
-
-        try {
-          id = Integer.parseInt(params.get("id"));
-        } catch (NumberFormatException e) {
-          System.out.println("id를 정수 형태로 입력해주세요.");
-          continue;
-        }
-
-        // 게시물이 비어있거나, 입력한 id가 articles에 size를 넘어선 경우
-        if (articles.isEmpty() || id > articles.size()) {
-          System.out.println("게시물이 존재하지 않습니다.");
-          continue;
-        }
-
-        Article article = articles.get(id - 1);
-
-        System.out.println("-- 게시물 상세보기 --");
-        System.out.printf("번호 : %d\n", article.id);
-        System.out.printf("제목 : %s\n", article.title);
-        System.out.printf("내용 : %s\n", article.content);
+        actionUsrArticleDetail(rq, articles);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
-        actionUsrArticleList(articles, rq);
+        actionUsrArticleList(rq, articles);
       } else {
         System.out.println("잘못 된 명령어 입니다.");
       }
@@ -87,7 +61,38 @@ public class Main {
     sc.close();
   }
 
-  private static void actionUsrArticleList(List<Article> articles, Rq rq) {
+  private static void actionUsrArticleDetail(Rq rq, List<Article> articles) {
+    Map<String, String> params = rq.getParams();
+
+    if (params.containsKey("id") == false) {
+      System.out.println("id를 입력해주세요.");
+      return;
+    }
+
+    int id = 0;
+
+    try {
+      id = Integer.parseInt(params.get("id"));
+    } catch (NumberFormatException e) {
+      System.out.println("id를 정수 형태로 입력해주세요.");
+      return;
+    }
+
+    // 게시물이 비어있거나, 입력한 id가 articles에 size를 넘어선 경우
+    if (articles.isEmpty() || id > articles.size()) {
+      System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    Article article = articles.get(id - 1);
+
+    System.out.println("-- 게시물 상세보기 --");
+    System.out.printf("번호 : %d\n", article.id);
+    System.out.printf("제목 : %s\n", article.title);
+    System.out.printf("내용 : %s\n", article.content);
+  }
+
+  private static void actionUsrArticleList(Rq rq, List<Article> articles) {
     System.out.println("-- 게시물 리스트 --");
     System.out.println("-------------------");
     System.out.println("번호 / 제목");
