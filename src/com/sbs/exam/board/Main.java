@@ -3,7 +3,10 @@ package com.sbs.exam.board;
 import java.util.*;
 
 public class Main {
-  static void makeTestData(List<Article> articles) {
+  static int articlesLastId = 0;
+  static List<Article> articles = new ArrayList<>();
+
+  static void makeTestData() {
     for (int i = 1; i <= 100; i++) {
       articles.add(new Article(i, "제목" + i, "내용" + i));
     }
@@ -12,10 +15,7 @@ public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
 
-    int articlesLastId = 0;
-    List<Article> articles = new ArrayList<>();
-
-    makeTestData(articles);
+    makeTestData();
 
     if (articles.size() > 0) {
       articlesLastId = articles.get(articles.size() - 1).id;
@@ -33,16 +33,15 @@ public class Main {
       if (rq.getUrlPath().equals("exit")) {
         break;
       } else if (rq.getUrlPath().equals("/usr/article/write")) {
-        actionUsrArticleWrite(sc, articles, articlesLastId);
-        articlesLastId++;
+        actionUsrArticleWrite(sc);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
-        actionUsrArticleDetail(rq, articles);
+        actionUsrArticleDetail(rq);
       } else if (rq.getUrlPath().equals("/usr/article/modify")) {
-        actionUsrArticleModify(sc, rq, articles);
+        actionUsrArticleModify(sc, rq);
       } else if (rq.getUrlPath().equals("/usr/article/delete")) {
-        actionUsrArticleDelete(rq, articles);
+        actionUsrArticleDelete(rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
-        actionUsrArticleList(rq, articles);
+        actionUsrArticleList(rq);
       } else {
         System.out.println("잘못 된 명령어 입니다.");
       }
@@ -53,7 +52,7 @@ public class Main {
     sc.close();
   }
 
-  private static void actionUsrArticleWrite(Scanner sc, List<Article> articles, int articlesLastId) {
+  private static void actionUsrArticleWrite(Scanner sc) {
     System.out.println("== 게시물 등록 ==");
     System.out.printf("제목 : ");
     String title = sc.nextLine();
@@ -69,7 +68,7 @@ public class Main {
     System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
   }
 
-  private static void actionUsrArticleDetail(Rq rq, List<Article> articles) {
+  private static void actionUsrArticleDetail(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (params.containsKey("id") == false) {
@@ -112,7 +111,7 @@ public class Main {
     System.out.printf("내용 : %s\n", foundArticle.content);
   }
 
-  private static void actionUsrArticleModify(Scanner sc, Rq rq, List<Article> articles) {
+  private static void actionUsrArticleModify(Scanner sc, Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (params.containsKey("id") == false) {
@@ -157,7 +156,7 @@ public class Main {
     System.out.printf("%d번 게시물이 수정 되었습니다.\n", foundArticle.id);
   }
 
-  private static void actionUsrArticleDelete(Rq rq, List<Article> articles) {
+  private static void actionUsrArticleDelete(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (params.containsKey("id") == false) {
@@ -199,7 +198,7 @@ public class Main {
   }
 
 
-  private static void actionUsrArticleList(Rq rq, List<Article> articles) {
+  private static void actionUsrArticleList(Rq rq) {
     System.out.println("-- 게시물 리스트 --");
     System.out.println("-------------------");
     System.out.println("번호 / 제목");
