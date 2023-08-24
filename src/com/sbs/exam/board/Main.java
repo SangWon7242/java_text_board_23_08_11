@@ -33,10 +33,12 @@ public class Main {
       if (rq.getUrlPath().equals("exit")) {
         break;
       } else if (rq.getUrlPath().equals("/usr/article/write")) {
-       actionUsrArticleWrite(sc, articles, articlesLastId);
-       articlesLastId++;
+        actionUsrArticleWrite(sc, articles, articlesLastId);
+        articlesLastId++;
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         actionUsrArticleDetail(rq, articles);
+      } else if (rq.getUrlPath().equals("/usr/article/modify")) {
+        actionUsrArticleModify(sc, rq, articles);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
         actionUsrArticleList(rq, articles);
       } else {
@@ -96,6 +98,39 @@ public class Main {
     System.out.printf("내용 : %s\n", article.content);
   }
 
+  private static void actionUsrArticleModify(Scanner sc, Rq rq, List<Article> articles) {
+    Map<String, String> params = rq.getParams();
+
+    if (params.containsKey("id") == false) {
+      System.out.println("id를 입력해주세요.");
+      return;
+    }
+
+    int id = 0;
+
+    try {
+      id = Integer.parseInt(params.get("id"));
+    } catch (NumberFormatException e) {
+      System.out.println("id를 정수 형태로 입력해주세요.");
+      return;
+    }
+
+    if (articles.isEmpty() || id > articles.size()) {
+      System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    Article article = articles.get(id - 1);
+
+    System.out.printf("-- %d번 게시물 수정 --\n", article.id);
+    System.out.printf("새 제목 : ");
+    article.title = sc.nextLine();
+    System.out.printf("새 내용 : ");
+    article.content = sc.nextLine();
+
+    System.out.printf("%d번 게시물이 수정 되었습니다.\n", article.id);
+  }
+
   private static void actionUsrArticleList(Rq rq, List<Article> articles) {
     System.out.println("-- 게시물 리스트 --");
     System.out.println("-------------------");
@@ -107,7 +142,7 @@ public class Main {
     // 검색 시작
     List<Article> filteredArticles = articles;
 
-    if(params.containsKey("searchKeyword")) {
+    if (params.containsKey("searchKeyword")) {
       String searchKeyword = params.get("searchKeyword");
 
       filteredArticles = new ArrayList<>();
@@ -115,7 +150,7 @@ public class Main {
       for (Article article : articles) {
         boolean matched = article.title.contains(searchKeyword) || article.content.contains(searchKeyword);
 
-        if(matched) {
+        if (matched) {
           filteredArticles.add(article);
         }
       }
@@ -129,7 +164,7 @@ public class Main {
       orderByIdDesc = false;
     }
 
-    if(orderByIdDesc) {
+    if (orderByIdDesc) {
       sortedArticles = Util.reverseList(sortedArticles);
     }
 
