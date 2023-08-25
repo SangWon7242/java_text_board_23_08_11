@@ -33,8 +33,20 @@ public class UsrArticleController {
     System.out.println("== 게시물 등록 ==");
     System.out.printf("제목 : ");
     String title = Container.sc.nextLine();
+
+    if(title.length() == 0) {
+      System.out.println("제목을 입력해주세요.");
+      return;
+    }
+
     System.out.printf("내용 : ");
     String content = Container.sc.nextLine();
+
+    if(content.length() == 0) {
+      System.out.println("내용을 입력해주세요.");
+      return;
+    }
+
     int id = ++articlesLastId;
 
     Article article = new Article(id, title, content);

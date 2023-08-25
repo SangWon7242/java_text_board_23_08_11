@@ -33,6 +33,8 @@ public class App {
         Container.usrArticleController.actionDelete(rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
         Container.usrArticleController.showList(rq);
+      } else if (rq.getUrlPath().equals("/usr/member/join")) {
+        Container.usrMemberController.actionJoin();
       } else {
         System.out.println("잘못 된 명령어 입니다.");
       }
