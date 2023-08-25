@@ -7,7 +7,6 @@ import com.sbs.exam.board.container.Container;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UsrArticleController {
   private int articlesLastId;
@@ -47,19 +46,10 @@ public class UsrArticleController {
   }
 
   public void showDetail(Rq rq) {
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (params.containsKey("id") == false) {
-      System.out.println("id를 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id를 정수 형태로 입력해주세요.");
+    if(id == 0) {
+      System.out.println("id를 올바를게 입력해주세요.");
       return;
     }
 
@@ -90,19 +80,10 @@ public class UsrArticleController {
   }
 
   public void actionModify(Rq rq) {
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (params.containsKey("id") == false) {
-      System.out.println("id를 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id를 정수 형태로 입력해주세요.");
+    if(id == 0) {
+      System.out.println("id를 올바를게 입력해주세요.");
       return;
     }
 
@@ -135,19 +116,10 @@ public class UsrArticleController {
   }
 
   public void actionDelete(Rq rq) {
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (params.containsKey("id") == false) {
-      System.out.println("id를 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id를 정수 형태로 입력해주세요.");
+    if(id == 0) {
+      System.out.println("id를 올바를게 입력해주세요.");
       return;
     }
 
@@ -176,18 +148,12 @@ public class UsrArticleController {
   }
 
   public void showList(Rq rq) {
-    System.out.println("-- 게시물 리스트 --");
-    System.out.println("-------------------");
-    System.out.println("번호 / 제목");
-    System.out.println("-------------------");
-
-    Map<String, String> params = rq.getParams();
+    String searchKeyword = rq.getParam("searchKeyword", "");
 
     // 검색 시작
     List<Article> filteredArticles = articles;
 
-    if (params.containsKey("searchKeyword")) {
-      String searchKeyword = params.get("searchKeyword");
+    if (searchKeyword.length() > 0) {
 
       filteredArticles = new ArrayList<>();
 
@@ -199,18 +165,21 @@ public class UsrArticleController {
         }
       }
     }
+    // 검색 끝
 
     List<Article> sortedArticles = filteredArticles; // 검색어가 없으면 filteredArticles는 articles랑 똑같다.
 
-    boolean orderByIdDesc = true;
-
-    if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
-      orderByIdDesc = false;
-    }
+    String orderBy = rq.getParam("orderBy", "idDesc");
+    boolean orderByIdDesc = orderBy.equals("idDesc");
 
     if (orderByIdDesc) {
       sortedArticles = Util.reverseList(sortedArticles);
     }
+
+    System.out.println("-- 게시물 리스트 --");
+    System.out.println("-------------------");
+    System.out.println("번호 / 제목");
+    System.out.println("-------------------");
 
     for (Article article : sortedArticles) {
       System.out.printf("%d / %s\n", article.id, article.title);
