@@ -8,8 +8,13 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-  static int articlesLastId = 0;
-  static List<Article> articles = new ArrayList<>();
+  static int articlesLastId;
+  static List<Article> articles;
+
+  static {
+    articlesLastId = 0;
+    articles = new ArrayList<>();
+  }
 
   static void makeTestData() {
     for (int i = 1; i <= 100; i++) {
