@@ -8,20 +8,20 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class App {
-  int articlesLastId;
-  List<Article> articles;
+  private int articlesLastId;
+  private List<Article> articles;
 
-  App() {
+  public App() {
     articlesLastId = 0;
     articles = new ArrayList<>();
   }
 
-  void makeTestData() {
+  private void makeTestData() {
     for (int i = 1; i <= 100; i++) {
       articles.add(new Article(i, "제목" + i, "내용" + i));
     }
   }
-  void run() {
+  public void run() {
 
     Scanner sc = Container.sc;
 
