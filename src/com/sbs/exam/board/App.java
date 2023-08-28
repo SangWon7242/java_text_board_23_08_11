@@ -20,7 +20,7 @@ public class App {
 
       String promptName = "명령어";
 
-      if(loginedMember != null) {
+      if (loginedMember != null) {
         promptName = loginedMember.loginId;
       }
 
@@ -45,6 +45,8 @@ public class App {
         Container.usrMemberController.actionJoin();
       } else if (rq.getUrlPath().equals("/usr/member/login")) {
         Container.usrMemberController.actionLogin(rq);
+      } else if (rq.getUrlPath().equals("/usr/member/logout")) {
+        Container.usrMemberController.actionLogout(rq);
       } else {
         System.out.println("잘못 된 명령어 입니다.");
       }

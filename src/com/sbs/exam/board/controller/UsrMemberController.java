@@ -79,6 +79,14 @@ public class UsrMemberController {
   }
 
   public void actionLogin(Rq rq) {
+    // 이미 로그인 되어 있으면 중복 로그인 되지 않게끔 방지    
+    boolean loginedMemberIsEmpty = rq.hasSessionAttr("loginedMember");
+
+    if(loginedMemberIsEmpty == true) {
+      System.out.println("이미 로그인 상태입니다.");
+      return;
+    }
+    
     System.out.printf("로그인 아이디 : ");
     String loginId = Container.sc.nextLine();
 
@@ -120,5 +128,17 @@ public class UsrMemberController {
     }
 
     return null;
+  }
+
+  public void actionLogout(Rq rq) {
+    Member loginedMember = (Member) Container.session.getAttribute("loginedMember");
+
+    if(loginedMember == null) {
+      System.out.println("로그인 후 이용해주세요.");
+      return;
+    }
+
+    rq.removeSessionAttr("loginedMember");
+    System.out.println("로그아웃 되었습니다.");
   }
 }

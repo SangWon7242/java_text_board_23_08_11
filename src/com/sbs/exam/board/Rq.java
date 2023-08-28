@@ -9,11 +9,13 @@ public class Rq {
   private String url;
   private Map<String, String> params;
   private String urlPath;
+  private Session session;
 
   Rq(String url) {
     this.url = url;
     urlPath = Util.getUrlPathFromUrl(this.url);
     params = Util.getParamsFromUrl(this.url);
+    session = Container.getSession();
   }
 
   public Map<String, String> getParams() {
@@ -45,7 +47,14 @@ public class Rq {
   }
 
   public void setSessionAttr(String key, Object value) {
-    Session session = Container.getSession();
     session.setAttribute(key, value);
+  }
+
+  public void removeSessionAttr(String key) {
+    session.removeAttribute(key);
+  }
+
+  public boolean hasSessionAttr(String key) {
+    return session.hasAttribute(key);
   }
 }
