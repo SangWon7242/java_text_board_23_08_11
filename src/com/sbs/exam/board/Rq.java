@@ -1,5 +1,8 @@
 package com.sbs.exam.board;
 
+import com.sbs.exam.board.container.Container;
+import com.sbs.exam.board.session.Session;
+
 import java.util.Map;
 
 public class Rq {
@@ -41,4 +44,8 @@ public class Rq {
     return params.get(paramName);
   }
 
+  public void setSessionAttr(String key, Object value) {
+    Session session = Container.getSession();
+    session.setAttribute(key, value);
+  }
 }
