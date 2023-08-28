@@ -32,7 +32,7 @@ public class UsrMemberController {
     System.out.printf("회원 아이디 : ");
     String loginId = Container.sc.nextLine();
 
-    if (loginId.length() == 0) {
+    if (loginId.trim().length() == 0) {
       System.out.println("로그인 아이디를 입력해주세요.");
       return;
     }
@@ -40,7 +40,7 @@ public class UsrMemberController {
     System.out.printf("비밀번호 입력 : ");
     String loginPw = Container.sc.nextLine();
 
-    if (loginPw.length() == 0) {
+    if (loginPw.trim().length() == 0) {
       System.out.println("로그인 비밀번호를 입력해주세요.");
       return;
     }
@@ -48,7 +48,7 @@ public class UsrMemberController {
     System.out.printf("비밀번호 확인 : ");
     String loginPwConfirm = Container.sc.nextLine();
 
-    if (loginPwConfirm.length() == 0) {
+    if (loginPwConfirm.trim().length() == 0) {
       System.out.println("로그인 비밀번호 확인을 입력해주세요.");
       return;
     }
@@ -63,7 +63,7 @@ public class UsrMemberController {
     System.out.printf("이름 : ");
     String name = Container.sc.nextLine();
 
-    if (name.length() == 0) {
+    if (name.trim().length() == 0) {
       System.out.println("이름을 입력해주세요.");
       return;
     }
@@ -75,5 +75,47 @@ public class UsrMemberController {
     members.add(member);
 
     System.out.printf("\"%s\" 님 회원가입 되었습니다.\n", member.name);
+  }
+
+  public void actionLogin() {
+    System.out.printf("로그인 아이디 : ");
+    String loginId = Container.sc.nextLine();
+
+    if(loginId.trim().length() == 0) {
+      System.out.println("로그인 아이디를 입력해주세요.");
+      return;
+    }
+
+    Member member = getMemberByLoginId(loginId);
+
+    if(member == null) {
+      System.out.println("해당 회원은 존재하지 않습니다.");
+      return;
+    }
+
+    System.out.printf("로그인 비밀번호 : ");
+    String loginPw = Container.sc.nextLine();
+
+    if(loginPw.trim().length() == 0) {
+      System.out.println("로그인 비밀번호를 입력해주세요.");
+      return;
+    }
+
+    if(member.loginPw.equals(loginPw) == false) {
+      System.out.println("로그인 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    System.out.printf("\"%s\"님 환영합니다.\n", member.loginId);
+  }
+
+  private Member getMemberByLoginId(String loginId) {
+    for(Member member : members) {
+      if(member.loginId.equals(loginId)) {
+        return member;
+      }
+    }
+
+    return null;
   }
 }

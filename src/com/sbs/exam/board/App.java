@@ -11,7 +11,6 @@ public class App {
     Scanner sc = Container.sc;
 
 
-
     System.out.println("== 게시판 v 0.1 ==");
     System.out.println("== 프로그램 시작 ==");
 
@@ -35,6 +34,8 @@ public class App {
         Container.usrArticleController.showList(rq);
       } else if (rq.getUrlPath().equals("/usr/member/join")) {
         Container.usrMemberController.actionJoin();
+      } else if (rq.getUrlPath().equals("/usr/member/login")) {
+        Container.usrMemberController.actionLogin();
       } else {
         System.out.println("잘못 된 명령어 입니다.");
       }
